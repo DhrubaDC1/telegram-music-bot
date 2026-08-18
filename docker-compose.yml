@@ -1,8 +1,6 @@
 services:
   telegram-bot-api:
-    build:
-      context: .
-      dockerfile: Dockerfile.telegram-bot-api
+    image: aiogram/telegram-bot-api:latest
     command:
       - --local
       - --http-ip-address=0.0.0.0
