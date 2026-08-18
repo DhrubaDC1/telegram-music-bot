@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM ubuntu:24.04 AS build
 
 ARG TELEGRAM_BOT_API_COMMIT=adfd7f6a8e990272851777eeb3ae0def4216f161
@@ -13,10 +14,11 @@ RUN git init /src \
     && git -C /src checkout --detach FETCH_HEAD \
     && git -C /src submodule update --init --recursive --depth 1
 
-RUN cmake -S /src -B /src/build \
+RUN --mount=type=cache,target=/src/build \
+    cmake -S /src -B /src/build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
-    && cmake --build /src/build --target install --parallel 2
+    && cmake --build /src/build --target install --parallel "$(nproc)"
 
 FROM ubuntu:24.04
 
