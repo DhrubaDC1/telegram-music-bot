@@ -3,6 +3,21 @@
 Phase 1 saves original `.flac` files to `./data/music/inbox/` without
 transcoding or buffering whole files in memory.
 
+Phase 2 watches that inbox and organizes valid FLACs into
+`./data/music/library/Artist/Album/`, reading tags via `music-metadata` and
+tracking everything (including SHA-256 dedup) in SQLite at
+`./data/music/database/library.db`. Files missing artist/album/title go to
+`./data/music/problematic/` untouched. See `src/music/processor.js` for the
+pipeline. `library/`, `problematic/`, and `database/` are created
+automatically; no manual `mkdir` needed for them.
+
+Run a full inbox scan by hand (safe to run anytime, won't duplicate already-
+processed tracks):
+
+```sh
+docker compose exec telegram-music-bot npm run process
+```
+
 ## Start
 
 1. Copy missing keys from `.env.example` into `.env`. Get `TELEGRAM_API_ID`

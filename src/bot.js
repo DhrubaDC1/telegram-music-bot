@@ -142,8 +142,7 @@ export function createBot() {
     );
 
     const destination = path.join(
-      config.musicDir,
-      "inbox",
+      config.inboxDir,
       safeFilename
     );
 
