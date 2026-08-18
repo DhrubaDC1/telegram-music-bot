@@ -76,6 +76,39 @@ export function insertTrack(track) {
     .run(track);
 }
 
+export function countTracks() {
+  return getDb().prepare("SELECT COUNT(*) AS n FROM tracks").get().n;
+}
+
+export function countAlbums() {
+  return getDb()
+    .prepare(
+      "SELECT COUNT(DISTINCT artist || ' ' || album) AS n FROM tracks"
+    )
+    .get().n;
+}
+
+export function getAllTracks() {
+  return getDb()
+    .prepare(
+      "SELECT * FROM tracks ORDER BY artist, album, disc_number, track_number"
+    )
+    .all();
+}
+
+export function getTracksPage(limit, offset) {
+  return getDb()
+    .prepare(
+      `SELECT * FROM tracks ORDER BY artist, album, disc_number, track_number
+       LIMIT ? OFFSET ?`
+    )
+    .all(limit, offset);
+}
+
+export function getTrackById(id) {
+  return getDb().prepare("SELECT * FROM tracks WHERE id = ?").get(id);
+}
+
 export function insertJob(sourcePath) {
   const result = getDb()
     .prepare(

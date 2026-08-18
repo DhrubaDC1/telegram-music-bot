@@ -1,4 +1,5 @@
 import { createBot } from "./bot.js";
+import { startApiServer } from "./api/server.js";
 import { config } from "./config.js";
 import { getDb } from "./database/database.js";
 import { events as processorEvents, scanInboxOnce, watchInbox } from "./music/processor.js";
@@ -31,3 +32,5 @@ bot.start({
 // watch for new arrivals.
 scanInboxOnce().catch((error) => console.error("❌ Initial inbox scan failed:", error));
 watchInbox();
+
+startApiServer().catch((error) => console.error("❌ Failed to start API server:", error));

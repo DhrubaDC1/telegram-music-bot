@@ -15,6 +15,12 @@ if (!ALLOWED_USER_ID) {
   throw new Error("ALLOWED_USER_ID is missing or invalid");
 }
 
+const MUSIC_API_TOKEN = process.env.MUSIC_API_TOKEN;
+
+if (!MUSIC_API_TOKEN) {
+  throw new Error("MUSIC_API_TOKEN is missing");
+}
+
 const MUSIC_DIR = process.env.MUSIC_DIR || "/music";
 
 export const config = {
@@ -28,4 +34,6 @@ export const config = {
   databasePath: path.join(MUSIC_DIR, "database", "library.db"),
   maxFileSizeBytes:
     Number(process.env.MAX_FILE_SIZE_MB || 500) * 1024 * 1024,
+  apiPort: Number(process.env.API_PORT || 3000),
+  apiToken: MUSIC_API_TOKEN,
 };

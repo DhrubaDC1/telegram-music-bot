@@ -1,0 +1,14 @@
+{
+  "name": "echo-mini-sync",
+  "version": "1.0.0",
+  "description": "Manually-triggered sync from the music server to the Echo Mini",
+  "type": "module",
+  "scripts": {
+    "sync": "node src/sync.js",
+    "health": "node src/health.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.0"
+  }
+}
