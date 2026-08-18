@@ -1,0 +1,33 @@
+FROM ubuntu:24.04 AS build
+
+ARG TELEGRAM_BOT_API_COMMIT=adfd7f6a8e990272851777eeb3ae0def4216f161
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates cmake g++ git gperf libssl-dev make zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git init /src \
+    && git -C /src remote add origin https://github.com/tdlib/telegram-bot-api.git \
+    && git -C /src fetch --depth 1 origin "$TELEGRAM_BOT_API_COMMIT" \
+    && git -C /src checkout --detach FETCH_HEAD \
+    && git -C /src submodule update --init --recursive --depth 1
+
+RUN cmake -S /src -B /src/build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr/local \
+    && cmake --build /src/build --target install --parallel 2
+
+FROM ubuntu:24.04
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates libssl3t64 zlib1g \
+    && rm -rf /var/lib/apt/lists/* \
+    && install -d -o ubuntu -g ubuntu \
+        /var/lib/telegram-bot-api/tmp
+
+COPY --from=build /usr/local/bin/telegram-bot-api /usr/local/bin/
+
+USER ubuntu
+
+ENTRYPOINT ["telegram-bot-api"]

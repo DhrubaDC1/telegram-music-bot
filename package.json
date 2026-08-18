@@ -1,0 +1,14 @@
+{
+  "name": "telegram-music-bot",
+  "version": "1.0.0",
+  "description": "Telegram FLAC downloader",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.0",
+    "grammy": "^1.38.4"
+  }
+}
